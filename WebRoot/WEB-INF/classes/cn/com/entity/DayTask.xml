@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.dao.DayTaskDaoInf">
+
+	<insert id="insertDayTask" parameterType="dayTask">
+	<![CDATA[
+		insert into dayTask(taskContent,dayMark,type,status,createTime,finishTime) 
+		values(#{taskContent},#{dayMark},#{type},#{status},STR_TO_DATE(#{createTime},'%Y-%m-%d %H:%i:%s') ,STR_TO_DATE(#{finishTime},'%Y-%m-%d %H:%i:%s'))
+	]]>
+	</insert>
+	
+	<update id="updateDayTask" parameterType="dayTask">
+		update dayTask
+		<set>
+			<if test="taskContent!=null">
+				taskContent = #{taskContent},
+			</if>
+			<if test="dayMark!=null">
+				dayMark = #{dayMark},
+			</if>
+			<if test="type!=null">
+				type = #{type},
+			</if>
+			<if test="status!=null">
+				status = #{status},
+			</if>
+			<if test="createTime!=null">
+				createTime = #{createTime},
+			</if>
+			<if test="finishTime!=null">
+				finishTime= #{finishTime},
+			</if>
+		</set>
+		where taskId = #{taskId}
+	</update>
+	
+	<select id="selDayTaskByCreateTime" parameterType="dayTask" resultType="dayTask">
+	<![CDATA[
+		select * from dayTask where DATE(createTime)> STR_TO_DATE(#{createTime},'%Y-%m-%d') - INTERVAL 7 day and DATE(createTime)<= STR_TO_DATE(#{createTime},'%Y-%m-%d')
+	]]>
+	</select>
+	
+	<delete id="deleteTask" parameterType="dayTask">
+	<![CDATA[
+		delete from dayTask where taskId=#{taskId}
+	]]>
+	</delete>
+	
+</mapper>

@@ -19,8 +19,6 @@
 
 # Local configuration file (sdk path, etc)
   local.properties
-  src/mail.properties
-  src/db.properties
 
 # Eclipse project files
   .classpath

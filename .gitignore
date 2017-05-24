@@ -1,6 +1,7 @@
-node_modules/
-platforms/
-plugins/
+# node files
+  node_modules/
+  platforms/
+  plugins/
 
 # built application files
   *.apk
@@ -13,15 +14,16 @@ plugins/
   *.class
  
 # generated files
- bin/
- gen/
+  bin/
+  gen/
 
 # Local configuration file (sdk path, etc)
- local.properties
- src/mail.properties
- src/db.properties
- # Eclipse project files
- .classpath
- .project
+  local.properties
+  src/mail.properties
+  src/db.properties
+
+# Eclipse project files
+  .classpath
+  .project
  
 .DS_Store

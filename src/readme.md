@@ -1,25 +1,26 @@
 本模板继承了ssm框架和常用的工具包如下：
-1.转码
-2.md5加密
-3.简单邮件发送
-4.xss攻击
-5.分页
-6.ajax数据json返回
+1. 转码
+2. md5加密
+3. 简单邮件发送
+4. xss攻击
+5. 分页
+6. ajax数据json返回
 
 RESTFUL
-创建资源 : 使用 HTTP POST
-获取资源 : 使用 HTTP GET
-更新资源 : 使用 HTTP PUT 
-删除资源 : 使用 HTTP DELETE 
-/blog/1　HTTP　GET　=>　　得到id　=　1的blog
-/blog/1　HTTP　DELETE　=>　删除　id　=　1的blog
-/blog/1　HTTP　PUT　=>　　更新id　=　1的blog
-/blog　　  HTTP　POST　=>　　新增BLOG
+* 创建资源 : 使用 HTTP POST
+* 获取资源 : 使用 HTTP GET
+* 更新资源 : 使用 HTTP PUT 
+* 删除资源 : 使用 HTTP DELETE 
+* /blog/1　HTTP　GET　=>　　得到id　=　1的blog
+* /blog/1　HTTP　DELETE　=>　删除　id　=　1的blog
+* /blog/1　HTTP　PUT　=>　　更新id　=　1的blog
+* /blog　　  HTTP　POST　=>　　新增BLOG
 
 
 ajax数据返回进行了封装，针对分页和不分页的情况
-1.分页
-使用PaginationResult
+1. 分页
+```java
+// 使用PaginationResult
 PaginationResult result = new PaginationResult();
 String page_number_str = request.getParameter("page_number");
 String page_size_str = request.getParameter("page_size");
@@ -29,11 +30,11 @@ int page_number = 1;
 int page_size = 10;
 
 if (page_number_str != null) {
-page_number = Integer.parseInt(page_number_str);
+  page_number = Integer.parseInt(page_number_str);
 }
 
 if (page_size_str != null) {
-page_size = Integer.parseInt(page_size_str);
+  page_size = Integer.parseInt(page_size_str);
 }
 PojoDomain<SysConf> pojoDomain = sysConfService.querySysConfList(page_number, page_size,keyword);
 result.getData().put("sysconf_list", pojoDomain.getPojolist());
@@ -42,20 +43,23 @@ result.setPageSize(pojoDomain.getPage_size());
 result.setPageTotal(pojoDomain.getPage_total());
 result.setTotalCount(pojoDomain.getTotal_count());
 JsonUtil.output(response, result);
-需要分页的service层
+
+// 需要分页的service层
 public PojoDomain<Mf_message> selectMessage(Mf_user user,int isRead,int type,int pageNum){
-int start = (pageNum-1)*PageParam.PAGE_SIZE;
-int end = pageNum*PageParam.PAGE_SIZE+1;
-PojoDomain<Mf_message> pojo = new PojoDomain<Mf_message>();
-List<Mf_message> messages=mf_messageDao.selectMessage(user, isRead, type,start,end);
-pojo.setTotal_count(mf_messageDao.countAllForMessage(user, isRead, type));
-pojo.setPage_number(pageNum);
-pojo.setPage_size(PageParam.PAGE_SIZE);
-pojo.setPojolist(messages);
-return pojo;
+  int start = (pageNum-1)*PageParam.PAGE_SIZE;
+  int end = pageNum*PageParam.PAGE_SIZE+1;
+  PojoDomain<Mf_message> pojo = new PojoDomain<Mf_message>();
+  List<Mf_message> messages=mf_messageDao.selectMessage(user, isRead, type,start,end);
+  pojo.setTotal_count(mf_messageDao.countAllForMessage(user, isRead, type));
+  pojo.setPage_number(pageNum);
+  pojo.setPage_size(PageParam.PAGE_SIZE);
+  pojo.setPojolist(messages);
+  return pojo;
 }
-2.不分页
-使用result
+```
+2. 不分页
+```java
+// 使用result
 Result result = new Result();
 String key = request.getParameter("ckey");
 String value = request.getParameter("cvalue");
@@ -65,3 +69,4 @@ sysConf.setCvalue(value);
 sysConf = sysConfService.updateSysConf(sysConf);
 result.getData().put("sysconf", sysConf);
 JsonUtil.output(response, result);
+```
